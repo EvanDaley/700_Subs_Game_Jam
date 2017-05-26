@@ -18,12 +18,24 @@ public class Reaper : MonoBehaviour {
 	public float stoppingDistance = 1.8f;
 	public float moveSpeed = 25;
 
+	public bool canFire = true;
+	public float cooldownTime = 0;
+	public float coolDuration = .3f;
+	public float damage = 40;
+
+	public GameObject pSystem;
+
+
 	void Start () {
 		actor = GetComponent<SelectableActor> ();
+		pSystem.SetActive (false);
 	}
 	
 	void Update () 
 	{
+		if (cooldownTime < Time.time)
+			canFire = true;
+		
 		if (actor.Selected)
 		{
 			if (Input.GetButtonDown ("Fire2"))
@@ -78,5 +90,45 @@ public class Reaper : MonoBehaviour {
 		{
 			transform.position = Vector3.MoveTowards (transform.position, moveTarget, moveSpeed * Time.deltaTime);
 		}
+	}
+
+	void OnTriggerStay(Collider other)
+	{
+		if (canFire == true)
+		{
+			canFire = false;
+			cooldownTime = Time.time + coolDuration;
+			Attack (other.gameObject);
+		}
+	}
+
+	void Attack(GameObject target)
+	{
+		pSystem.SetActive (true);
+		pSystem.transform.LookAt (target.transform.position);
+		Invoke ("HideSystem", coolDuration/4);
+
+		EnemyHealth health = target.GetComponent<EnemyHealth> ();
+		if (health != null)
+		{
+			health.TakeDamage (damage);
+		} else
+		{
+			if (target.tag == "Minerals")
+			{
+				CurrencyManager.Instance.addMinerals (100);
+			}
+
+			if (target.tag == "GoldMinerals")
+			{
+				CurrencyManager.Instance.addMinerals (200);
+			}
+		}
+	}
+
+	void HideSystem()
+	{
+		pSystem.SetActive (false);
+
 	}
 }

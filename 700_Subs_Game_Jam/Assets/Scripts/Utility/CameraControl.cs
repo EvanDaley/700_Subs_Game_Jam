@@ -12,6 +12,7 @@ public class CameraControl : MonoBehaviour {
 	public float minHeight = 20;
 	public float maxHeight = 20;
 
+	public bool shouldMove = true;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,9 @@ public class CameraControl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (!shouldMove)
+			return;
+		
 		if (Input.GetKey (KeyCode.H))
 		{
 			transform.position = initialPosition;

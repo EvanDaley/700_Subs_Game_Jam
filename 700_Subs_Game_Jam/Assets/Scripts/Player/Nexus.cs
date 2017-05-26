@@ -11,9 +11,16 @@ public enum ShipType
 
 public class Nexus : MonoBehaviour {
 
+	public static Nexus Instance;
+
 	public GameObject spawnPoint;
 
 	public GameObject reaperPrefab;
+
+	void Awake()
+	{
+		Instance = this;
+	}
 
 	void Start () 
 	{
