@@ -21,8 +21,8 @@ public class SpawnEnemies : MonoBehaviour {
 		{
 			spawnTime = Time.time + spawnCooldown;
 
-			if (spawnCooldown < .4f)
-				spawnCooldown = .4f;
+			if (spawnCooldown < .1f)
+				spawnCooldown = .1f;
 			else
 				spawnCooldown *= .99f;
 
